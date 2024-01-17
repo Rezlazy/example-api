@@ -16,7 +16,7 @@ const (
 	fullSchemaFileRoute = "/schema.json"
 )
 
-func SwaggerHandler(ctx context.Context, schemaFS embed.FS, schemaFilePath string, endpoint string) (http.Handler, error) {
+func SwaggerHandler(ctx context.Context, schemaFS embed.FS, schemaFilePath string, endpoint *url.URL) (http.Handler, error) {
 	fullSchemaContent, err := buildSchemaJSON(ctx, schemaFS, schemaFilePath, endpoint, true)
 	if err != nil {
 		return nil, fmt.Errorf("prepare full openapi schema JSON: %w", err)
@@ -51,7 +51,7 @@ func SwaggerHandler(ctx context.Context, schemaFS embed.FS, schemaFilePath strin
 	return handler, nil
 }
 
-func buildSchemaJSON(ctx context.Context, openapiSpecFS embed.FS, schemaFilePath string, endpoint string, withInternalizeRefs bool) ([]byte, error) {
+func buildSchemaJSON(ctx context.Context, openapiSpecFS embed.FS, schemaFilePath string, endpoint *url.URL, withInternalizeRefs bool) ([]byte, error) {
 	openapiSchemaContent, err := openapiSpecFS.ReadFile(schemaFilePath)
 	if err != nil {
 		return nil, fmt.Errorf("load openapi schema file: %w", err)
@@ -69,7 +69,7 @@ func buildSchemaJSON(ctx context.Context, openapiSpecFS embed.FS, schemaFilePath
 	}
 
 	server := &openapi3.Server{
-		URL: endpoint,
+		URL: endpoint.String(),
 	}
 	openapi3Doc.AddServer(server)
 

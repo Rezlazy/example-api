@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"net/http"
+	"net/url"
 )
 
 func main() {
@@ -61,17 +62,21 @@ func main() {
 	serverAPI = middleware.CORSMW(serverAPI)
 	serverAPI = httputil.NewRequestTimeout(serverAPI, cfg.Server.DefaultTimeout, nil)
 
-	endpoint := fmt.Sprintf(":%d", cfg.Server.Port)
+	endpointWithoutHost := fmt.Sprintf(":%d", cfg.Server.Port)
+	endpoint := cfg.Server.Host + endpointWithoutHost
+	endpointURL := &url.URL{
+		Host: endpoint,
+	}
 
-	go runSwagger(ctx, endpoint)
+	go runSwagger(ctx, endpointURL)
 
-	if err := http.ListenAndServe(endpoint, serverAPI); err != nil {
+	if err := http.ListenAndServe(endpointWithoutHost, serverAPI); err != nil {
 		err = fmt.Errorf("listen and serve: %w", err)
 		logger.Fatal(ctx, err.Error())
 	}
 }
 
-func runSwagger(ctx context.Context, endpoint string) {
+func runSwagger(ctx context.Context, endpoint *url.URL) {
 	swaggerHandler, err := httputil.SwaggerHandler(ctx, server_api.SchemaDir, server_api.SchemaFilePath, endpoint)
 	if err != nil {
 		logger.Error(ctx, err.Error())

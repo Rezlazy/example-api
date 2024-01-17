@@ -35,7 +35,7 @@ func (pk *PublicKey) UnmarshalText(content []byte) error {
 }
 
 type Auth struct {
-	Email      string      `env:"EMAIl,required"`
+	Email      string      `env:"EMAIL,required"`
 	Password   string      `env:"PASSWORD,required"`
 	PrivateKey *PrivateKey `env:"PRIVATE_KEY,file" envDefault:"config/auth_private_key"`
 	PublicKey  *PublicKey  `env:"PUBLIC_KEY,file" envDefault:"config/auth_public_key"`
