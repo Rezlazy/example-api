@@ -1,0 +1,21 @@
+AddItemRequest:
+  description: Тело запроса для создания заметки
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#/AddItemRequestSchema'
+
+AddItemResponse:
+  description: Успешный запрос. Возвращает созданную заметку.
+  content:
+    application/json:
+      schema:
+        $ref: '#/AddItemResponseSchema'
+
+AddItemRequestSchema:
+  $ref: 'schemas/item.yaml#/ItemCreateInput'
+
+AddItemResponseSchema:
+  $ref: 'schemas/item.yaml#/Item'
+

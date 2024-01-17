@@ -1,0 +1,9 @@
+Token:
+  type: object
+  properties:
+    access_token:
+      type: string
+      nullable: false
+  required:
+    - access_token
+  additionalProperties: false

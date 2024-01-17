@@ -1,0 +1,40 @@
+ListCommonData:
+  type: object
+  properties:
+    name:
+      type: string
+      minLength: 2
+      maxLength: 256
+      pattern: '^[А-Яа-я\s]+$'
+      example: На завтра
+  required:
+    - name
+
+ListCreateInput:
+  allOf:
+    - type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '../../item/schemas/item.yaml#/ItemCommonData'
+    - $ref: '#/ListCommonData'
+  required:
+    - name
+
+List:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+      required:
+        - id
+    - $ref: '#/ListCommonData'
+    - type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '../../item/schemas/item.yaml#/Item'

@@ -1,0 +1,101 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: Пример
+  description: Пример API ToDo листа
+
+tags:
+  - name: Auth
+    description: Авторизационные запросы
+  - name: List
+    description: Запросы по листам
+  - name: Item
+    description: Запросы по заметкам
+
+paths:
+  /v1/auth/login/:
+    post:
+      tags:
+        - Auth
+      summary: Ручка для Авторизации пользователя
+      security: []
+      requestBody:
+        $ref: 'auth/auth_login.yaml#/AuthLoginRequest'
+      responses:
+        '200':
+          $ref: 'auth/auth_login.yaml#/AuthLoginResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /v1/todo/list/:
+    post:
+      tags:
+        - List
+      summary: Ручка для создания TODO листа
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: 'list/add_list.yaml#/AddListRequest'
+      responses:
+        '200':
+          $ref: 'list/add_list.yaml#/AddListResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+    get:
+      tags:
+        - List
+      summary: Ручка для получения TODO листов
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - $ref: 'list/list_list.yaml#/ListListRequestParamIDs'
+      responses:
+        '200':
+          $ref: 'list/list_list.yaml#/ListListResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+  /v1/todo/item/:
+    post:
+      tags:
+        - Item
+      summary: Ручка для создания заметки
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        $ref: 'item/add_item.yaml#/AddItemRequest'
+      responses:
+        '200':
+          $ref: 'item/add_item.yaml#/AddItemResponse'
+        default:
+          $ref: '#/components/responses/DefaultError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error_message:
+          type: string
+          description: Текст ошибки
+      required:
+        - error_message
+
+  responses:
+    DefaultError:
+      description: Ошибка по умолчанию
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+security:
+  - bearerAuth: []

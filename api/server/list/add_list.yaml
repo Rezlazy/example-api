@@ -1,0 +1,21 @@
+AddListRequest:
+  description: Тело запроса для создания TODO листа
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#/AddListRequestSchema'
+
+AddListResponse:
+  description: Успешный запрос. Возвращает созданный TODO лист.
+  content:
+    application/json:
+      schema:
+        $ref: '#/AddListResponseSchema'
+
+AddListRequestSchema:
+  $ref: 'schemas/list.yaml#/ListCreateInput'
+
+AddListResponseSchema:
+  $ref: 'schemas/list.yaml#/List'
+

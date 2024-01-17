@@ -1,0 +1,40 @@
+ItemCommonData:
+  type: object
+  properties:
+    title:
+      type: string
+      minLength: 2
+      maxLength: 256
+      pattern: '^[А-Яа-я\s]+$'
+      example: Сходить в магазин
+    description:
+      type: string
+      minLength: 2
+      maxLength: 256
+      pattern: '^[А-Яа-я\s]+$'
+      example: Купить пива
+  required:
+    - title
+
+ItemCreateInput:
+  allOf:
+    - $ref: '#/ItemCommonData'
+    - type: object
+      properties:
+        list_id:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - list_id
+
+Item:
+  allOf:
+    - $ref: '#/ItemCreateInput'
+    - type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+      required:
+        - id

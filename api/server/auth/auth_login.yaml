@@ -1,0 +1,32 @@
+AuthLoginRequest:
+  description: Тело запроса для авторизации
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#/AuthLoginRequestSchema'
+
+AuthLoginResponse:
+  description: Успешный запрос. Возвращает
+  content:
+    application/json:
+      schema:
+        $ref: '#/AuthLoginResponseSchema'
+
+AuthLoginRequestSchema:
+  type: object
+  properties:
+    email:
+      type: string
+      pattern: '^[a-zA-Z]+[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$'
+      example: test@example.ru
+    password:
+      type: string
+      example: password
+  required:
+    - email
+    - password
+
+AuthLoginResponseSchema:
+  $ref: 'schemas/auth.yaml#/Token'
+

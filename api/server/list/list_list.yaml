@@ -1,0 +1,23 @@
+ListListRequestParamIDs:
+  name: ids
+  in: query
+  description: ID-ки листов
+  schema:
+    type: array
+    items:
+      type: integer
+      format: int64
+
+
+ListListResponse:
+  description: Успешный запрос. Возвращает TODO листы.
+  content:
+    application/json:
+      schema:
+        $ref: '#/ListListResponseSchema'
+
+ListListResponseSchema:
+  type: array
+  items:
+    $ref: 'schemas/list.yaml#/List'
+
